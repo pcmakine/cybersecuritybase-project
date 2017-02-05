@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!--    <head>
+        <link rel="stylesheet" type="text/css" href="/css/main.css" th:href="@{/css/main.css}"/>
+        <title>Chat</title>
+    </head>-->
+    <head th:replace="fragments/head :: head">
+    </head>
+    <body>
+        <div class="container">
+            <header th:replace="fragments/menu :: menu">
+                <p>header with links etc</p>
+            </header>
+
+            <h1>Chat</h1>
+            <div th:if="${messages != null and #lists.size(messages) > 0}">
+                <div class="messageContainer" th:each="message : ${messages}">
+                    <div class="messageBox">
+                        <div><b><span th:text="${message.author.username}">author</span> ( <span th:text="${#dates.format(message.postedDate, 'yyyy-MM-dd HH:mm:ss')}">date</span> )</b></div>
+                        <hr/>
+                        <span th:text="${message.content}">content</span>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${messages == null or #lists.size(messages) == 0}">
+                No messages yet. Post something or come back later!
+            </div>
+
+
+            <form class="mediumTopMargin" action="#" th:action="@{/chat}" method="POST">
+                <p><textarea rows="4" cols="50" name="message" id="message"></textarea></p>
+                <p><input type="submit" value="Post" /></p>
+            </form>
+
+            <p></p>
+        </div>
+    </body>
+</html>

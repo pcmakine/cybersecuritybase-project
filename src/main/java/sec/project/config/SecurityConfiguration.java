@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -20,9 +22,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // no real security at the moment
+        http.csrf().disable();
+        http.headers().frameOptions().sameOrigin();
         http.authorizeRequests()
-                .anyRequest().permitAll();
+                .antMatchers("/h2-console/*").permitAll()
+                .antMatchers("/signup/**").permitAll()
+                .anyRequest().authenticated();
+
+
+        http.formLogin()
+                .successHandler(successHandler())
+                .permitAll()
+                .and().logout().permitAll();
     }
 
     @Autowired
@@ -33,5 +44,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        CustomAuthenticationSuccessHandler handler = new CustomAuthenticationSuccessHandler();
+        //handler.setUseReferer(true);
+        return handler;
     }
 }

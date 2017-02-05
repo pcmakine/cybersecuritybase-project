@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/head :: head">
+    </head>
+    <body>
+
+        <header th:replace="fragments/menu :: menu">
+            <p>header with links etc</p>
+        </header>
+        <h2 th:text="${account.username}">username</h2>
+        Email: <span th:text="${account.email}">email</span>
+        <div th:if="${messages != null}">
+            <span>You have authored <span th:text="${#lists.size(messages)}">authored messages</span> messages</span>
+        </div>
+    </body>
+</html>

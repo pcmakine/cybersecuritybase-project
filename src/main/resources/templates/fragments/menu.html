@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Header template</title>
+    </head>
+    <body>
+
+        <header th:fragment="menu">
+            <a th:href="@{/chat}">Chat</a> |
+            <a th:href="@{/profile/}+ ${session.accountId}">My profile</a>
+            <ul>
+                <li th:each="error : ${errors}">
+                    <span th:text="${error}">error</span>
+                </li>
+            </ul>
+        </header>
+    </body>
+</html>

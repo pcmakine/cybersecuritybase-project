@@ -1,0 +1,21 @@
+.container{
+  width: 50%;
+}
+
+.messageBox {
+    padding: 10px 10px 20px 10px;
+    background-color: #ffd9b3;
+    list-style:none;
+}
+
+.messageContainer{
+   margin-bottom: 20px;
+}
+
+.messageContainer:last-child{
+    margin-bottom: 0px;
+}
+
+.mediumTopMargin {
+    margin-top: 50px;
+}
