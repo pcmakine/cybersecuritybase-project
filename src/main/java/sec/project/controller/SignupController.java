@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sec.project.config.CustomUserDetailsService;
 import sec.project.domain.Account;
 import sec.project.domain.Signup;
@@ -41,22 +42,22 @@ public class SignupController {
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String submitForm(@RequestParam String username, @RequestParam String password,
-                             @RequestParam String email, Model model, HttpServletRequest request,
-                             HttpSession session) {
+                             @RequestParam String email, HttpServletRequest request,
+                             HttpSession session, RedirectAttributes redirectAttrs) {
         List<String> errors = new ArrayList<>();
         Account existingAccount = accountRepository.findByUsername(username);
         if( existingAccount != null){
             errors.add("Username exists already!");
-            model.addAttribute("errors", errors);
+            redirectAttrs.addFlashAttribute("errors", errors);
             System.out.println("Username exists!");
-            return "signup";
+            return "redirect:/signup";
         }
 
         if( emailExists(email) ){
             errors.add("Email exists already!");
-            model.addAttribute("errors", errors);
+            redirectAttrs.addFlashAttribute("errors", errors);
             System.out.println("Username exists!");
-            return "signup";
+            return "redirect:/signup";
         }
 
         Account account = new Account();
@@ -68,8 +69,9 @@ public class SignupController {
             request.login(username, password);
         } catch (ServletException e) {
             errors.add("Exception in logging in!");
+            redirectAttrs.addFlashAttribute("errors", errors);
             e.printStackTrace();
-            return "signup";
+            return "redirect:/signup";
         }
         System.out.println("Adding account id: " + account.getId() + " to the model");
         session.setAttribute("accountId", String.valueOf(account.getId()));
